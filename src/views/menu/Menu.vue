@@ -75,8 +75,9 @@ async function handleAddToCart(dish: Dish) {
     <!-- Dish grid -->
     <div v-if="filteredDishes.length > 0" class="dish-grid">
       <div v-for="dish in filteredDishes" :key="dish.id" class="dish-card">
-        <div class="card-img" :style="getImageUrl(dish) ? { backgroundImage: `url(${getImageUrl(dish)})` } : {}">
-          <div v-if="!getImageUrl(dish)" class="img-placeholder">
+        <div class="card-img">
+          <img v-if="getImageUrl(dish)" :src="getImageUrl(dish)" loading="lazy" :alt="dish.name" />
+          <div v-else class="img-placeholder">
             <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="#3a3d42" stroke-width="1.5">
               <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
               <circle cx="8.5" cy="8.5" r="1.5" />
@@ -177,10 +178,17 @@ async function handleAddToCart(dish: Dish) {
 .card-img {
   width: 100%;
   aspect-ratio: 4 / 3;
-  background: #1a1b1e center / cover no-repeat;
+  background: #1a1b1e;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
+}
+
+.card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .img-placeholder {

@@ -80,7 +80,7 @@ async function handleDelete(id: number) {
       <el-table :data="dishes" v-loading="loading" border stripe>
         <el-table-column label="图片" width="80" class-name="col-image">
           <template #default="{ row }">
-            <img v-if="row.image_url" :src="serverUrl + row.image_url" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;" />
+            <img v-if="row.image_url" :src="serverUrl + row.image_url" loading="lazy" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;" />
             <span v-else style="color: #62666d;">无图</span>
           </template>
         </el-table-column>
