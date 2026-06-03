@@ -11,6 +11,7 @@ const route = useRoute()
 const userStore = useUserStore()
 const cartStore = useCartStore()
 
+const showMePopup = ref(false)
 const isMobile = ref(window.innerWidth < 768)
 const tabIndex = ref(0)
 
@@ -35,19 +36,24 @@ onUnmounted(() => {
   window.removeEventListener('resize', checkWidth)
 })
 
-function goTab(path: string) {
-  router.push(path)
+function goTab(tab: typeof tabs[0]) {
+  if (tab.action === 'me') {
+    showMePopup.value = true
+    return
+  }
+  router.push(tab.path)
 }
 
 function handleLogout() {
   userStore.clearAuth()
-  router.push('/user/login')
+  router.push('/login')
 }
 
 const tabs = [
   { path: '/user/menu', icon: 'M3 12h18M3 6h18M3 18h18', label: '菜单' },
   { path: '/user/cart', icon: 'M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18M16 10a4 4 0 0 1-8 0', label: '购物车' },
   { path: '/user/orders', icon: 'M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2M9 15h6', label: '订单' },
+  { path: '', icon: 'M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8z', label: '我的', action: 'me' },
 ]
 </script>
 
@@ -89,13 +95,13 @@ const tabs = [
     <nav v-if="isMobile" class="bottom-tabs">
       <div
         v-for="(tab, i) in tabs"
-        :key="tab.path"
+        :key="tab.label"
         class="tab"
-        :class="{ active: tabIndex === i }"
-        @click="goTab(tab.path)"
+        :class="{ active: tab.action !== 'me' && tabIndex === i }"
+        @click="goTab(tab)"
       >
         <div class="tab-icon-wrap">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" :stroke="tabIndex === i ? '#5e6ad2' : '#62666d'" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" :stroke="(tab.action !== 'me' && tabIndex === i) ? '#5e6ad2' : '#62666d'" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
             <path :d="tab.icon" />
           </svg>
           <span v-if="tab.label === '购物车' && cartStore.totalCount > 0" class="tab-badge">{{ cartStore.totalCount }}</span>
@@ -103,6 +109,19 @@ const tabs = [
         <span class="tab-label">{{ tab.label }}</span>
       </div>
     </nav>
+
+    <!-- "我的" popup -->
+    <Teleport to="body">
+      <Transition name="fade">
+        <div v-if="showMePopup" class="me-overlay" @click="showMePopup = false">
+          <div class="me-sheet" @click.stop>
+            <div class="me-sheet-title">{{ userStore.user?.nickname || userStore.user?.phone || '用户' }}</div>
+            <button class="me-sheet-btn" @click="showMePopup = false; handleLogout()">退出登录</button>
+            <button class="me-sheet-cancel" @click="showMePopup = false">取消</button>
+          </div>
+        </div>
+      </Transition>
+    </Teleport>
   </div>
 </template>
 
@@ -259,5 +278,67 @@ const tabs = [
 .tab-label {
   font-size: 11px;
   color: #62666d;
+}
+
+/* "我的" action sheet */
+.me-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.me-sheet {
+  width: 100%;
+  max-width: 480px;
+  background: #0f1011;
+  border-radius: 16px 16px 0 0;
+  padding: 24px 16px;
+  padding-bottom: calc(24px + env(safe-area-inset-bottom, 0));
+}
+
+.me-sheet-title {
+  text-align: center;
+  color: #f7f8f8;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.me-sheet-btn {
+  width: 100%;
+  height: 48px;
+  border: none;
+  border-radius: 10px;
+  background: rgba(229, 72, 77, 0.1);
+  color: #e5484d;
+  font-size: 15px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.me-sheet-btn:active {
+  background: rgba(229, 72, 77, 0.2);
+}
+
+.me-sheet-cancel {
+  width: 100%;
+  height: 48px;
+  border: 1px solid #23252a;
+  border-radius: 10px;
+  background: #1a1b1e;
+  color: #8a8f98;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.2s;
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
 }
 </style>

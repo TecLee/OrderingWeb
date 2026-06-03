@@ -16,27 +16,16 @@ function isAdmin(): boolean {
 const router = createRouter({
   history: createWebHistory(),
   routes: [
-    // Admin login
+    // Unified login (phone for customers, password for admin/chef)
     {
       path: '/login',
       name: 'Login',
       component: () => import('../views/Login.vue'),
       meta: { noAuth: true },
     },
-    // Chef login
-    {
-      path: '/chef/login',
-      name: 'ChefLogin',
-      component: () => import('../views/chef-login/ChefLogin.vue'),
-      meta: { noAuth: true },
-    },
-    // Customer login
-    {
-      path: '/user/login',
-      name: 'UserLogin',
-      component: () => import('../views/user-login/UserLogin.vue'),
-      meta: { noAuth: true },
-    },
+    // Legacy routes — redirect to unified login
+    { path: '/chef/login', redirect: '/login' },
+    { path: '/user/login', redirect: '/login' },
     // Root — redirect based on auth state
     {
       path: '/',
@@ -62,7 +51,7 @@ const router = createRouter({
           } catch { /* expired */ }
           localStorage.removeItem('user_token')
         }
-        return '/user/login'  // not logged in — must login first
+        return '/login'
       },
     },
     // Admin layout (requires admin role)
@@ -116,23 +105,18 @@ router.beforeEach((to, _from, next) => {
 
   // Kitchen — admin or chef
   if (to.meta.requiresKitchenAuth) {
-    if (!adminToken) return next('/chef/login')
+    if (!adminToken) return next('/login')
   }
 
   // Customer auth routes
   if (to.meta.requiresUserAuth && !userToken) {
-    return next('/user/login')
+    return next('/login')
   }
 
-  // Redirect logged-in users away from login pages
-  if (to.path === '/login' && adminToken) {
-    return next(isAdmin() ? '/' : '/kitchen')
-  }
-  if (to.path === '/chef/login' && adminToken) {
-    return next('/kitchen')
-  }
-  if (to.path === '/user/login' && userToken) {
-    return next('/user/menu')
+  // Redirect logged-in users away from login page
+  if (to.path === '/login') {
+    if (adminToken) return next(isAdmin() ? '/' : '/kitchen')
+    if (userToken) return next('/user/menu')
   }
 
   next()

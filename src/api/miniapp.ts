@@ -27,7 +27,7 @@ miniappRequest.interceptors.response.use(
     if (error.response?.status === 401) {
       localStorage.removeItem('user_token')
       localStorage.removeItem('user_info')
-      window.location.href = '/user/login'
+      window.location.href = '/login'
     } else {
       ElMessage.error(error.response?.data?.detail || error.message || '网络错误')
     }

@@ -20,9 +20,8 @@ function closeMenu() {
 
 function handleLogout() {
   closeMenu()
-  const role = authStore.user?.role || ''
   authStore.clearAuth()
-  router.push(role === 'chef' ? '/chef/login' : '/login')
+  router.push('/login')
 }
 
 // Close drawer on route change

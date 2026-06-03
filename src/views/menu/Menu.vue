@@ -48,7 +48,7 @@ async function handleAddToCart(dish: Dish) {
   addingDishes.add(dish.id)
   try {
     await cartStore.addToCart(dish.id, 1)
-    ElMessage.success('已加入购物车')
+    ElMessage.success({ message: '已加入购物车', duration: 800 })
   } catch { /* ignore */ }
   finally {
     setTimeout(() => addingDishes.delete(dish.id), 800)

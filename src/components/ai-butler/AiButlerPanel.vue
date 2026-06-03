@@ -210,6 +210,7 @@ const panelClass = computed(() => ({
         class="input-field"
         :disabled="isStreaming || isThinking || (!menuReady && !menuError)"
         :placeholder="menuError ? 'AI 服务不可用' : (isThinking || isStreaming) ? '小厨正在思考...' : '输入消息...'"
+        maxlength="500"
         rows="1"
         @input="autoResize"
         @keydown="handleKeydown"

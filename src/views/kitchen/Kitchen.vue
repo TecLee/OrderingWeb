@@ -95,9 +95,8 @@ function disconnectWS() {
 async function handleLogout() {
   try {
     await ElMessageBox.confirm('确定要退出登录吗？', '提示', { type: 'warning' })
-    const role = authStore.user?.role || ''
     authStore.clearAuth()
-    router.push(role === 'chef' ? '/chef/login' : '/login')
+    router.push('/login')
   } catch { /* cancelled */ }
 }
 
