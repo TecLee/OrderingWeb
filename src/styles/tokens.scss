@@ -1,0 +1,164 @@
+// ============================================================
+// Linear Design System tokens
+// Source: awesome-design-md/design-md/linear.app/DESIGN.md
+// ============================================================
+
+// --- Color palette ---
+$canvas:          #17181a;
+$surface-1:       #1e1f22;
+$surface-2:       #252629;
+$surface-3:       #2b2d30;
+$ink:             #f7f8f8;
+$ink-muted:       #d0d6e0;
+$ink-subtle:      #8a8f98;
+$ink-tertiary:    #62666d;
+$primary:         #5e6ad2;
+$primary-hover:   #828fff;
+$primary-focus:   #5e69d1;
+$hairline:        #23252a;
+$hairline-strong: #34343a;
+$success:         #27a644;
+$danger:          #f56c6c;
+$warning:         #e6a23c;
+
+// --- Typography ---
+$font-family: 'Inter', 'SF Pro Display', -apple-system, system-ui, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+$font-body:   14px;
+$font-button: 14px;
+
+// --- Spacing (4px base) ---
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 12px;
+$spacing-lg: 16px;
+$spacing-xl: 24px;
+$spacing-xxl: 32px;
+
+// --- Breakpoints ---
+$bp-tablet: 768px;
+$bp-phone: 480px;
+
+@mixin tablet {
+  @media (max-width: #{$bp-tablet}) { @content; }
+}
+
+@mixin phone {
+  @media (max-width: #{$bp-phone}) { @content; }
+}
+
+// --- Radius ---
+$radius-xs: 4px;
+$radius-sm: 6px;
+$radius-md: 8px;
+$radius-lg: 12px;
+$radius-xl: 16px;
+$radius-pill: 9999px;
+
+// ============================================================
+// CSS Custom Properties — overrides Element Plus
+// ============================================================
+
+:root {
+  // Primary accent
+  --el-color-primary:          #{$primary};
+  --el-color-primary-light-3:  #{$primary-hover};
+  --el-color-primary-light-5:  #a6abeb;
+  --el-color-primary-light-7:  #c7caf3;
+  --el-color-primary-light-8:  #dbddf7;
+  --el-color-primary-light-9:  #edeefb;
+  --el-color-primary-dark-2:   #{$primary-focus};
+
+  // Background
+  --el-bg-color:               #{$canvas};
+  --el-bg-color-overlay:       #{$surface-1};
+  --el-bg-color-page:          #{$canvas};
+
+  // Text
+  --el-text-color-primary:     #{$ink};
+  --el-text-color-regular:     #{$ink-muted};
+  --el-text-color-secondary:   #{$ink-subtle};
+  --el-text-color-placeholder: #{$ink-tertiary};
+
+  // Border
+  --el-border-color:           #{$hairline};
+  --el-border-color-light:     #{$hairline};
+  --el-border-color-lighter:   #{$hairline-strong};
+  --el-border-color-extra-light: #2f3136;
+
+  // Fill / surface
+  --el-fill-color:             #{$surface-1};
+  --el-fill-color-light:       #{$surface-2};
+  --el-fill-color-lighter:     #{$surface-3};
+  --el-fill-color-blank:       #{$canvas};
+
+  // Semantic
+  --el-color-success:          #{$success};
+  --el-color-warning:          #{$warning};
+  --el-color-danger:           #{$danger};
+  --el-color-info:             #{$ink-subtle};
+
+  // Radius — Linear: buttons 8px, cards 12px, no pill CTAs
+  --el-border-radius-base:     #{$radius-md};
+  --el-border-radius-small:    #{$radius-xs};
+  --el-border-radius-round:    #{$radius-md};
+
+  // Typography
+  --el-font-family:            #{$font-family};
+  --el-font-size-base:         #{$font-body};
+
+  // Mask / overlay
+  --el-mask-color:             #{rgba(1, 1, 2, 0.85)};
+  --el-overlay-color-lighter:  #{rgba(1, 1, 2, 0.6)};
+
+  // --- Component-level overrides ---
+
+  // Table
+  --el-table-bg-color:           #{$surface-1};
+  --el-table-tr-bg-color:        #{$surface-1};
+  --el-table-header-bg-color:    #{$surface-2};
+  --el-table-row-hover-bg-color: #{$surface-2};
+  --el-table-border-color:       #{$hairline};
+  --el-table-text-color:         #{$ink};
+  --el-table-header-text-color:  #{$ink-muted};
+
+  // Input / Select
+  --el-input-bg-color:           #{$surface-1};
+  --el-input-border-color:       #{$hairline};
+  --el-input-hover-border-color: #{$hairline-strong};
+  --el-input-focus-border-color: #{$primary};
+  --el-input-text-color:         #{$ink};
+  --el-input-placeholder-color:  #{$ink-tertiary};
+
+  // Button
+  --el-button-font-weight:       500;
+  --el-button-font-size:         14px;
+  --el-button-border-radius:     #{$radius-md};
+  --el-button-padding:           8px 16px;
+
+  // Menu (sidebar)
+  --el-menu-bg-color:            #{$canvas};
+  --el-menu-text-color:          #{$ink-subtle};
+  --el-menu-hover-bg-color:      #{$surface-1};
+  --el-menu-active-color:        #{$primary};
+
+  // Dialog
+  --el-dialog-bg-color:          #{$surface-1};
+  --el-dialog-title-font-size:   18px;
+
+  // Card — Linear: surface-1 bg, hairline border, lg radius
+  --el-card-bg-color:            #{$surface-1};
+  --el-card-border-color:        #{$hairline};
+  --el-card-border-radius:       #{$radius-lg};
+
+  // Pagination
+  --el-pagination-bg-color:      transparent;
+  --el-pagination-button-bg-color: #{$surface-1};
+
+  // Tag
+  --el-tag-bg-color:             #{$surface-2};
+  --el-tag-border-color:         #{$hairline};
+  --el-tag-text-color:           #{$ink-muted};
+
+  // Loading
+  --el-loading-spinner-size:     24px;
+}
